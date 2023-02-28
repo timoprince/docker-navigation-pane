@@ -16,7 +16,7 @@
 * backend-thinkphp6
     * 整体架构：[thinkphp6](https://www.kancloud.cn/manual/thinkphp6_0/1037481)
     * 主要三方包清单：
-        * [apidoc-php](https://hg-code.gitee.io/apidoc-php/) - 文档服务
+        * [hg/apidoc](https://hg-code.gitee.io/apidoc-php/) - 文档服务
         * [firebase/php-jwt](https://github.com/firebase/php-jwt) - JWT服务
 
 
