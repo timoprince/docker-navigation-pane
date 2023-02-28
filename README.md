@@ -29,3 +29,11 @@
         * [vue-router@3](https://v3.router.vuejs.org/zh/) - 路由
         * [axios](https://axios-http.com/zh/docs/intro) - 网络请求
         * [momentjs](http://momentjs.cn/) - 日期格式化
+
+# 其它资料
+
+## 基础容器
+
+* [webdevops/php-nginx](https://hub.docker.com/r/webdevops/php-nginx) - PHP
+* [nginx](https://hub.docker.com/_/nginx/) - 前端
+* [mysql](https://hub.docker.com/_/mysql) - 数据库
