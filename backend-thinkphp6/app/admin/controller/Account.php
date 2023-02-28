@@ -3,7 +3,9 @@
 namespace app\admin\controller;
 
 use app\admin\validate\AccountValidate;
+use app\common\controller\BaseController;
 use app\common\model\SysUser;
+use app\common\services\AccountServices;
 use app\common\utils\ReturnResponse;
 use hg\apidoc\annotation\Method;
 use hg\apidoc\annotation\Param;
@@ -19,12 +21,17 @@ use think\exception\ValidateException;
  */
 class Account extends BaseController
 {
+    public function __construct(App $app, AccountServices $services)
+    {
+        parent::__construct($app);
+        $this->services = $services;
+    }
 
     /**
      * @Title("账号登录-2023年3月1日")
      * @Method("post")
      * @Param(ref="app\common\model\SysUser",field="account,password")
-     * @Returned(ref="app\common\model\SysUser",withoutField="password")
+     * @Returned("user_info",ref="app\common\model\SysUser",withoutField="password")
      * @return void
      */
     public function login()
@@ -37,11 +44,10 @@ class Account extends BaseController
             $account = $this->request->post("account");
             $password = $this->request->post("password");
 
-            $model = new SysUser();
-            if (!$model->hasAccount($account)) ReturnResponse::error("账号 $account 不存在！");
-            if (!$model->checkPassword($account, $password)) ReturnResponse::error("密码不正确！请检查您的输入！");
+            if (!$this->services->hasAccount($account)) ReturnResponse::error("账号 $account 不存在！");
+            if (!$this->services->checkPassword($account, $password)) ReturnResponse::error("密码不正确！请检查您的输入！");
 
-            ReturnResponse::success($model->getInfoByAccount($account));
+            ReturnResponse::success($this->services->getInfoByAccount($account));
 
         } catch (ValidateException $validateException) {
             ReturnResponse::error($validateException->getError());
