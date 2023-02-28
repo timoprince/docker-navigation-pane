@@ -1,0 +1,49 @@
+version: '3'
+networks:
+  proxy:
+    ipam:
+      config:
+        - subnet: 172.88.0.0/24
+volumes:
+  # 数据持久化保存
+  docker-navigation-pane-database: { }
+services:
+  # 接口服务
+  api:
+    image: timoprince/docker-navigation-pane-backend-api
+    restart: always
+    ports:
+      - "8801:8801"
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    networks:
+      proxy:
+        ipv4_address: 172.88.0.11
+  # 数据库
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "8802:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - docker-navigation-pane-database:/var/lib/mysql
+    networks:
+      proxy:
+        ipv4_address: 172.88.0.22
+  # 数据库管理（可以不装）
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8803:80"
+    environment:
+      PMA_ARBITRARY: 0
+      PMA_HOST: 172.88.0.22
+      PMA_USER: root
+      PMA_PASSWORD: 123456
+    networks:
+      proxy:
+        ipv4_address: 172.88.0.33
