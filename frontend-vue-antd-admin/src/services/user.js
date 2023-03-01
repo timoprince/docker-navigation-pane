@@ -1,21 +1,18 @@
-import {LOGIN, ROUTES} from '@/services/api'
+import api from "./api";
 import {request, METHOD, removeAuthorization} from '@/utils/request'
+import md5 from "js-md5";
 
 /**
  * 登录服务
- * @param name 账户名
- * @param password 账户密码
+ * @param account 账号
+ * @param password 密码
  * @returns {Promise<AxiosResponse<T>>}
  */
-export async function login(name, password) {
-  return request(LOGIN, METHOD.POST, {
-    name: name,
-    password: password
+export async function login(account, password) {
+  return request(api.account.login, METHOD.POST, {
+    account: account,
+    password: md5(password)
   })
-}
-
-export async function getRoutesConfig() {
-  return request(ROUTES, METHOD.GET)
 }
 
 /**
@@ -29,6 +26,5 @@ export function logout() {
 }
 export default {
   login,
-  logout,
-  getRoutesConfig
+  logout
 }

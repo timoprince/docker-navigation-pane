@@ -35,6 +35,12 @@ const resp403 = {
     const {message} = options
     if (response.code === 403) {
       message.error('请求被拒绝')
+    } else {
+      const {code, msg} = response.data;
+      if (code === 0) return response.data;
+
+      message.error(msg);
+      return Promise.reject(new Error(msg))
     }
     return response
   },
