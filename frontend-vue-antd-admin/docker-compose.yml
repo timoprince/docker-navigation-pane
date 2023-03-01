@@ -1,0 +1,10 @@
+version: '3'
+services:
+  admin:
+    image: timoprince/docker-navigation-pane-admin
+    restart: always
+    ports:
+      - "80:80"
+    build:
+      dockerfile: Dockerfile
+      context: ./
