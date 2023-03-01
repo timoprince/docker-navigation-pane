@@ -100,13 +100,16 @@ abstract class BaseDao
 
                 switch ($type) {
                     case "where":
-                        $model = $model->where(...$args);
+                        $model = $model->where($args);
                         break;
                     case "whereOr":
-                        $model = $model->whereOr(...$args);
+                        $model = $model->whereOr($args);
                         break;
-                    case "whereBetween":
-                        $model = $model->whereBetween(...$args);
+                    case "whereBetweenTime":
+                        if (count($args) === 3) $model = $model->whereBetweenTime($args[0], $args[1], $args[2]);
+                        break;
+                    case "whereLike":
+                        if (count($args) == 2) $model = $model->whereLike($args[0], $args[1]);
                         break;
                 }
             }
