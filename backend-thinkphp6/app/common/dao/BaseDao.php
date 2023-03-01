@@ -54,21 +54,25 @@ abstract class BaseDao
      */
     public function updateInfoById(int $id, array $field, array $allowField = [])
     {
+        $ignoreField = ["id", "create_time", "update_time", "delete_time"];
 
+        // 数据处理
         foreach ($field as $key => $value) {
+            // 移除不需要录入的字段
+            if (in_array($key, $ignoreField)) {
+                unset($field[$key]);
+            }
+            // 去除字符串数据头尾空格
             if (is_string($value) && !empty($value)) {
                 $value = trim($value);
                 $field[$key] = $value;
             }
         }
 
+        // 如果 $allowField 没有值，则默认更新全部传入表单字段
         if (count($allowField) === 0) {
-            $ignoreField = ["create_time", "update_time", "delete_time"];
-
             foreach ($field as $key => $value) {
-                if (!in_array($key, $ignoreField)) {
-                    $allowField[] = $key;
-                }
+                $allowField[] = $key;
             }
         }
 

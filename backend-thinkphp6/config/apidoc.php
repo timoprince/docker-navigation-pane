@@ -13,6 +13,12 @@ return [
             'path' => 'app\admin\controller',
             // （必须）唯一的key
             'key' => 'admin',
+            // 应用参数
+            'params' => [
+                'header' => [
+                    ['name' => 'Authorization', 'type' => 'string', 'require' => true, 'desc' => '后台登录令牌'],
+                ]
+            ]
         ]
     ],
     // （必须）指定通用注释定义的文件地址
@@ -47,7 +53,7 @@ return [
         // （选配）全局的请求Header
         'header' => [
             // name=字段名，type=字段类型，require=是否必须，default=默认值，desc=字段描述
-            ['name' => 'Authorization', 'type' => 'string', 'require' => true, 'desc' => '身份令牌Token'],
+//            ['name' => 'Authorization', 'type' => 'string', 'require' => true, 'desc' => '身份令牌Token'],
         ],
         // （选配）全局的请求Query
         'query' => [
