@@ -13,6 +13,29 @@ abstract class BaseDao
     public $model;
 
     /**
+     * 清洗表单数据
+     * @param array $field 表单数据
+     * @return array
+     */
+    public function clearField(array $field): array
+    {
+        $ignoreField = ["id", "create_time", "update_time", "delete_time"];
+        // 数据处理
+        foreach ($field as $key => $value) {
+            // 移除不需要录入的字段
+            if (in_array($key, $ignoreField)) {
+                unset($field[$key]);
+            }
+            // 去除字符串数据头尾空格
+            if (is_string($value) && !empty($value)) {
+                $value = trim($value);
+                $field[$key] = $value;
+            }
+        }
+        return $field;
+    }
+
+    /**
      * @param mixed $model
      */
     public function setModel($model): void
@@ -30,11 +53,11 @@ abstract class BaseDao
     }
 
     /**
-     * 通过id查询信息
+     * 通过id查询行信息
      * @param int $id id
      * @return array|null
      */
-    public function getInfoById(int $id): ?array
+    public function getRow(int $id): ?array
     {
         try {
             $row = $this->getModel()->where(["id" => $id])->find();
@@ -46,28 +69,36 @@ abstract class BaseDao
     }
 
     /**
-     * 通过id更新信息
+     * 创建一条新数据
+     * @param array $field 表单数据
+     * @param array $allowField 允许字段，留空则所有字段
+     * @return void
+     */
+    public function createRow(array $field, array $allowField = [])
+    {
+        // 数据处理
+        $field = $this->clearField($field);
+
+        if (count($allowField) == 0) {
+            foreach ($field as $key => $value) {
+                $allowField[] = $key;
+            }
+        }
+
+        $this->getModel()->allowField($allowField)->save($field);
+    }
+
+    /**
+     * 通过id更新行信息
      * @param int $id id
      * @param array $field 新信息
      * @param array $allowField 允许字段，留空则所有字段
      * @return void
      */
-    public function updateInfoById(int $id, array $field, array $allowField = [])
+    public function updateRow(int $id, array $field, array $allowField = [])
     {
-        $ignoreField = ["id", "create_time", "update_time", "delete_time"];
-
         // 数据处理
-        foreach ($field as $key => $value) {
-            // 移除不需要录入的字段
-            if (in_array($key, $ignoreField)) {
-                unset($field[$key]);
-            }
-            // 去除字符串数据头尾空格
-            if (is_string($value) && !empty($value)) {
-                $value = trim($value);
-                $field[$key] = $value;
-            }
-        }
+        $field = $this->clearField($field);
 
         // 如果 $allowField 没有值，则默认更新全部传入表单字段
         if (count($allowField) === 0) {
@@ -77,6 +108,24 @@ abstract class BaseDao
         }
 
         $this->getModel()->update($field, ["id" => $id], $allowField);
+    }
+
+    /**
+     * 删除行
+     * @param int $id 行id
+     * @param bool $force 是否真实删除
+     * @return string
+     */
+    public function removeRow(int $id, bool $force = false): string
+    {
+        try {
+            $find = $this->getModel()->where(["id" => $id])->find();
+            if (empty($find)) return "删除数据失败！没有找到对应记录！";
+            $find->force($force)->delete();
+            return "";
+        } catch (DataNotFoundException|ModelNotFoundException|DbException $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -132,4 +181,5 @@ abstract class BaseDao
             ];
         }
     }
+
 }

@@ -18,7 +18,7 @@ class ProfileServices extends BaseServices
      */
     public function getInfo(int $id): ?array
     {
-        return $this->dao->getInfoById($id);
+        return $this->dao->getRow($id);
     }
 
     /**
@@ -37,6 +37,6 @@ class ProfileServices extends BaseServices
             $allowField[] = "password";
         }
 
-        $this->dao->updateInfoById($id, $data, $allowField);
+        $this->dao->updateRow($id, $data, $allowField);
     }
 }
