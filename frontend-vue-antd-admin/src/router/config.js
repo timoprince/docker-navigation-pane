@@ -34,12 +34,23 @@ const options = {
           component: () => import('@/pages/dashboard/dashboard')
         },
         {
-          path: 'sysUserManage',
-          name: '用户管理',
+          path: "system",
+          name: "系统管理",
           meta: {
-            icon: 'user'
+            icon: "setting",
+            authority: "admin"
           },
-          component: () => import('@/pages/system/sysUserManage/sysUserManage')
+          component: BlankView,
+          children: [
+            {
+              path: 'sysUserManage',
+              name: '用户管理',
+              meta: {
+                icon: 'user'
+              },
+              component: () => import('@/pages/system/sysUserManage/sysUserManage')
+            },
+          ]
         },
         {
           path: 'exception',

@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('account', ['setRoles', 'setUser']),
+    ...mapMutations('account', ['setRoles', 'setUser', 'setPermissions']),
     handleSubmit() {
       const {field, remember_me} = this;
       const {account, password} = field;
@@ -59,7 +59,10 @@ export default {
           login(account, password).then((res) => {
             const {user_info, token, expire} = res.data;
             this.setUser(user_info);
-            if (user_info.role) this.setRoles([{id: user_info.role}]);
+            if (user_info.role) {
+              this.setRoles([{id: user_info.role}]);
+              this.setPermissions([{id: user_info.role}])
+            }
             setAuthorization({token, expireAt: new Date().getTime() + expire * 1000});
             this.$emit("finished")
           }).finally(() => {
