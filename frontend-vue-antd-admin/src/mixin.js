@@ -7,8 +7,21 @@ Vue.mixin({
          * @param field 表单字段
          * @returns {any}
          */
-        copyField(field) {
+        copyFields(field) {
             return JSON.parse(JSON.stringify(field));
+        }
+    },
+    directives: {
+        /**
+         * 去头尾空格
+         * @param elem
+         */
+        trim(elem) {
+            elem.querySelectorAll("input,textarea").forEach((el) => {
+                el.addEventListener("blur", () => {
+                    el.value = el.value.replace(/^\s+|\s+$/, "");
+                })
+            })
         }
     }
 })

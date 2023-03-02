@@ -2,17 +2,36 @@
   .ant-form-item {
     display: flex;
     justify-content: flex-start;
+
+    .ant-form-item-label {
+      flex-shrink: 0;
+    }
+
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
   }
 
   &.label-4em {
     .ant-form-item {
       .ant-form-item-label {
-        flex-shrink: 0;
         width: 4em;
       }
 
-      .ant-form-item-control-wrapper {
-        flex: 1;
+      &.flex-form-footer {
+        padding-left: 4em
+      }
+    }
+  }
+
+  &.label-6em {
+    .ant-form-item {
+      .ant-form-item-label {
+        width: 6em;
+      }
+
+      &.flex-form-footer {
+        padding-left: 6em
       }
     }
   }
