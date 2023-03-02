@@ -9,4 +9,5 @@ ENV PHP_UPLOAD_MAX_FILESIZE=10M
 COPY ./vhost.conf /opt/docker/etc/nginx/vhost.conf
 COPY ./ /app
 EXPOSE 8801
+RUN chmod -R 777 /app
 RUN composer2 install -d /app

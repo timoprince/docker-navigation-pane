@@ -82,7 +82,7 @@ return [
     //（选配）默认作者
     'default_author' => '',
     //（选配）默认请求类型
-    'default_method' => 'GET',
+    'default_method' => 'POST',
     //（选配）允许跨域访问
     'allowCrossDomain' => false,
     /**

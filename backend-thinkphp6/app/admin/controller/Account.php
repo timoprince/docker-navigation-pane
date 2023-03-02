@@ -30,7 +30,7 @@ class Account extends BaseController
 
     /**
      * @Title("账号登录-2023年3月1日")
-     * @Method("post")
+     * @Method("POST")
      * @Param(ref="app\common\model\SysUser",field="account,password")
      * @Returned("token",type="string",desc="令牌")
      * @Returned("expire",type="int",desc="有效期，默认7天")

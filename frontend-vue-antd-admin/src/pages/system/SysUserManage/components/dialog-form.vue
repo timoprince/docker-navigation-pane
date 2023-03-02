@@ -1,6 +1,9 @@
 <template>
   <a-modal :footer="null" :title="title" :visible="visible" width="520px" @cancel="hide">
     <a-form-model ref="form" v-trim :model="field" :rules="rules" class="flex-form label-6em">
+      <a-form-model-item label="头像" prop="avatar">
+        <upload-image v-model="field.avatar"></upload-image>
+      </a-form-model-item>
       <a-form-model-item label="账号" prop="account">
         <a-input v-model="field.account" :allowClear="true" :maxLength="16" placeholder="请输入账号"></a-input>
       </a-form-model-item>
@@ -31,6 +34,7 @@
 <script>
 
 import {optionRoles} from "@/pages/system/SysUserManage/options";
+import UploadImage from "@/components/upload/upload-image.vue";
 
 function resetField() {
   return {
@@ -45,6 +49,7 @@ function resetField() {
 
 export default {
   name: "dialog-form",
+  components: {UploadImage},
   data() {
     return {
       optionRoles,
