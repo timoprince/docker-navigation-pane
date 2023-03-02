@@ -34,6 +34,14 @@ const options = {
           component: () => import('@/pages/dashboard/dashboard')
         },
         {
+          path: 'SysUserManage',
+          name: '用户管理',
+          meta: {
+            icon: 'user'
+          },
+          component: () => import('@/pages/system/SysUserManage/SysUserManage')
+        },
+        {
           path: 'exception',
           name: '异常页',
           meta: {

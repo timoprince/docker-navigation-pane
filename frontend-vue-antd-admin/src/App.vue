@@ -6,7 +6,7 @@
 
 <script>
 import {enquireScreen} from './utils/util'
-import {mapState, mapMutations} from 'vuex'
+import {mapMutations, mapState} from 'vuex'
 import themeUtil from '@/utils/themeUtil';
 import {getI18nKey} from '@/utils/routerUtil'
 
@@ -87,7 +87,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-  #id{
-  }
+<style lang="less">
+@import "global";
 </style>
