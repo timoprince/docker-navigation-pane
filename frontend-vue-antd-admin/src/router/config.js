@@ -34,12 +34,12 @@ const options = {
           component: () => import('@/pages/dashboard/dashboard')
         },
         {
-          path: 'SysUserManage',
+          path: 'sysUserManage',
           name: '用户管理',
           meta: {
             icon: 'user'
           },
-          component: () => import('@/pages/system/SysUserManage/SysUserManage')
+          component: () => import('@/pages/system/sysUserManage/sysUserManage')
         },
         {
           path: 'exception',

@@ -63,9 +63,11 @@ const reqCommon = {
    */
   onFulfilled(config, options) {
     const {message} = options
-    const {url, xsrfCookieName} = config
-    if (url.indexOf('login') === -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
-      message.warning('认证 token 已过期，请重新登录')
+    const {url, xsrfCookieName} = config;
+    if (url.indexOf("login") == -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
+      message.warning('登录状态已过期，请重新登陆！')
+    } else {
+      config.headers[xsrfCookieName] = Cookie.get(xsrfCookieName);
     }
     return config
   },

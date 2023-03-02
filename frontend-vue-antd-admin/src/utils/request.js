@@ -5,9 +5,9 @@ import Cookie from 'js-cookie'
 const xsrfHeaderName = 'Authorization'
 
 axios.defaults.timeout = 5000
-// axios.defaults.withCredentials = false;
-// axios.defaults.xsrfHeaderName = xsrfHeaderName
-// axios.defaults.xsrfCookieName = xsrfHeaderName
+axios.defaults.withCredentials = false;
+axios.defaults.xsrfHeaderName = xsrfHeaderName
+axios.defaults.xsrfCookieName = xsrfHeaderName
 
 // 认证类型
 const AUTH_TYPE = {
@@ -41,6 +41,7 @@ async function request(url, method, params, config = {}) {
             return axios.get(url, {params, ...config})
     }
 }
+
 
 /**
  * 设置认证信息

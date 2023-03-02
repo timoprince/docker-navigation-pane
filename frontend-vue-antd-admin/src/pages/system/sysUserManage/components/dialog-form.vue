@@ -1,5 +1,6 @@
 <template>
-  <a-modal :footer="null" :title="title" :visible="visible" width="520px" @cancel="hide">
+  <a-modal :destroyOnClose="true" :footer="null" :forceRender="true" :maskClosable="false" :title="title"
+           :visible="visible" width="520px" @cancel="hide">
     <a-form-model ref="form" v-trim :model="field" :rules="rules" class="flex-form label-6em">
       <a-form-model-item label="头像" prop="avatar">
         <upload-image v-model="field.avatar"></upload-image>
@@ -7,14 +8,16 @@
       <a-form-model-item label="账号" prop="account">
         <a-input v-model="field.account" :allowClear="true" :maxLength="16" placeholder="请输入账号"></a-input>
       </a-form-model-item>
-      <a-form-model-item label="密码" prop="password">
-        <a-input v-model="field.password" :allowClear="true" :maxLength="16" placeholder="请输入密码"
-                 type="password"></a-input>
-      </a-form-model-item>
-      <a-form-model-item label="确认密码" prop="confirm_password">
-        <a-input v-model="field.confirm_password" :allowClear="true" :maxLength="16" placeholder="确认一遍密码"
-                 type="password"></a-input>
-      </a-form-model-item>
+      <template v-if="!field.id">
+        <a-form-model-item label="密码" prop="password">
+          <a-input v-model="field.password" :allowClear="true" :maxLength="16" placeholder="请输入密码"
+                   type="password"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="确认密码" prop="confirm_password">
+          <a-input v-model="field.confirm_password" :allowClear="true" :maxLength="16" placeholder="确认一遍密码"
+                   type="password"></a-input>
+        </a-form-model-item>
+      </template>
       <a-form-model-item label="用户名" prop="name">
         <a-input v-model="field.name" :allowClear="true" :maxLength="16" placeholder="请输入账号"></a-input>
       </a-form-model-item>
@@ -33,38 +36,45 @@
 
 <script>
 
-import {optionRoles} from "@/pages/system/SysUserManage/options";
+import {optionRoles, resetField} from "@/pages/system/sysUserManage/options";
 import UploadImage from "@/components/upload/upload-image.vue";
-
-function resetField() {
-  return {
-    "account": "",
-    "password": "",
-    "name": "",
-    "avatar": "",
-    "role": "",
-    "confirm_password": ""
-  }
-}
+import {createRow, updateRow} from "@/services/sysUserManage";
 
 export default {
   name: "dialog-form",
   components: {UploadImage},
   data() {
+    const field = resetField();
+
+    function validateConfirmPwd(rules, value, callback) {
+      if (field.confirm_password !== field.password) {
+        callback('两次输入的密码不一致！');
+      } else {
+        callback()
+      }
+    }
+
     return {
       optionRoles,
-      field: resetField(),
+      field,
       visible: false,
-      rules: {},
-      labelCol: {
-        style: {
-          width: "6em"
-        }
-      },
-      wrapperCol: {
-        style: {
-          width: "auto"
-        }
+      rules: {
+        "account": [
+          {required: true, message: "账号不能为空"}
+        ],
+        "password": [
+          {required: true, message: "账号不能为空"}
+        ],
+        "name": [
+          {required: true, message: "用户名不能为空"}
+        ],
+        "role": [
+          {required: true, message: "角色是必选项"}
+        ],
+        "confirm_password": [
+          {required: true, message: "确认密码是必填项"},
+          {validator: validateConfirmPwd}
+        ]
       }
     }
   },
@@ -94,10 +104,18 @@ export default {
       this.$refs.form.validate((ok) => {
         if (ok) {
           const field = this.copyFields(this.field);
-          console.table(field);
+
+          const request = field.id ? updateRow(field.id, field) : createRow(field);
+
+          if (request instanceof Promise) {
+            request.then(() => {
+              this.hide();
+              this.$emit("finished", field);
+            });
+          }
         }
       })
-    }
+    },
   }
 }
 </script>
