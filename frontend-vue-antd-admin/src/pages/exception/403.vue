@@ -1,5 +1,5 @@
 <template>
-  <exception-page home-route="/demo" :style="`min-height: ${minHeight}`" type="403" />
+  <exception-page :home-route="adminUrl" :style="`min-height: ${minHeight}`" type="403" />
 </template>
 
 <script>
@@ -9,6 +9,9 @@ export default {
   name: 'Exp403',
   components: {ExceptionPage},
   computed: {
+    adminUrl(){
+      return process.env.VUE_APP_ADMIN_MAIN;
+    },
     ...mapState('setting', ['pageMinHeight']),
     minHeight() {
       return this.pageMinHeight ? this.pageMinHeight + 'px' : '100vh'

@@ -1,7 +1,7 @@
 <template>
   <a-layout-sider :theme="sideTheme" :class="['side-menu', 'beauty-scroll', isMobile ? null : 'shadow']" width="256px" :collapsible="collapsible" v-model="collapsed" :trigger="null">
     <div :class="['logo', theme]">
-      <router-link to="/dashboard/workplace">
+      <router-link :to="adminUrl">
         <img src="@/assets/img/logo.png">
         <h1>{{systemName}}</h1>
       </router-link>
@@ -38,6 +38,9 @@ export default {
     }
   },
   computed: {
+    adminUrl(){
+      return process.env.VUE_APP_ADMIN_MAIN;
+    },
     sideTheme() {
       return this.theme == 'light' ? this.theme : 'dark'
     },

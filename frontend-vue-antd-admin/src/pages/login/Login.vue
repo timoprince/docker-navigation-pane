@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     toAdmin() {
-      this.$router.push("/demo");
+      this.$router.push(process.env.VUE_APP_ADMIN_MAIN);
     }
   }
 }
