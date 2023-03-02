@@ -1,6 +1,5 @@
 import TabsView from '@/layouts/tabs/TabsView'
 import BlankView from '@/layouts/BlankView'
-import PageView from '@/layouts/PageView'
 
 // 路由配置
 const options = {
@@ -27,48 +26,19 @@ const options = {
       redirect: '/login',
       children: [
         {
-          path: 'demo',
-          name: '演示页',
+          path: 'dashboard',
+          name: '仪表盘',
           meta: {
-            icon: 'file-ppt'
+            icon: 'dashboard'
           },
-          component: () => import('@/pages/demo')
-        },
-        {
-          path: 'parent1',
-          name: '父级路由1',
-          meta: {
-            icon: 'dashboard',
-          },
-          component: BlankView,
-          children: [
-            {
-              path: 'demo1',
-              name: '演示页面1',
-              component: () => import('@/pages/demo'),
-            }
-          ]
-        },
-        {
-          path: 'parent2',
-          name: '父级路由2',
-          meta: {
-            icon: 'form'
-          },
-          component: PageView,
-          children: [
-            {
-              path: 'demo2',
-              name: '演示页面2',
-              component: () => import('@/pages/demo'),
-            }
-          ]
+          component: () => import('@/pages/dashboard/dashboard')
         },
         {
           path: 'exception',
           name: '异常页',
           meta: {
             icon: 'warning',
+            invisible: true
           },
           component: BlankView,
           children: [

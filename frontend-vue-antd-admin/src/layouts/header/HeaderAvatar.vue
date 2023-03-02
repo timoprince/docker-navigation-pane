@@ -1,17 +1,13 @@
 <template>
   <a-dropdown>
     <div class="header-avatar" style="cursor: pointer">
-      <a-avatar class="avatar" size="small" shape="circle" :src="user.avatar"/>
+      <a-avatar class="avatar" size="small" shape="circle" :src="user.avatar" icon="user"/>
       <span class="name">{{user.name}}</span>
     </div>
     <a-menu :class="['avatar-menu']" slot="overlay">
       <a-menu-item>
         <a-icon type="user" />
         <span>个人中心</span>
-      </a-menu-item>
-      <a-menu-item>
-        <a-icon type="setting" />
-        <span>设置</span>
       </a-menu-item>
       <a-menu-divider />
       <a-menu-item @click="logout">
@@ -34,7 +30,7 @@ export default {
   methods: {
     logout() {
       logout()
-      this.$router.push('/login')
+      this.$router.push(process.env.VUE_APP_ADMIN_LOGIN);
     }
   }
 }
@@ -54,7 +50,7 @@ export default {
     }
   }
   .avatar-menu{
-    width: 150px;
+    min-width: 120px;
   }
 
 </style>
