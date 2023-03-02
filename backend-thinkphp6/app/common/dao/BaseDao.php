@@ -129,6 +129,19 @@ abstract class BaseDao
     }
 
     /**
+     * 查询全部数据
+     * @return void
+     */
+    public function queryList(array $whereList = [], array $hiddenField = []): array
+    {
+        try {
+            return $this->getBaseModel($whereList, $hiddenField)->select();
+        } catch (DbException $e) {
+            return [];
+        }
+    }
+
+    /**
      * 分页查询数据列表
      * @param int $page_size 每页条数
      * @param int $page_num 当前页码
@@ -139,29 +152,7 @@ abstract class BaseDao
     public function queryListByPage(int $page_size = 10, int $page_num = 1, array $whereList = [], array $hiddenField = []): array
     {
         try {
-            $model = $this->getModel();
-
-            if (count($hiddenField) > 0) $model = $model->hidden($hiddenField);
-
-            foreach ($whereList as $where) {
-                $type = $where[0];
-                $args = $where[1];
-
-                switch ($type) {
-                    case "where":
-                        $model = $model->where($args);
-                        break;
-                    case "whereOr":
-                        $model = $model->whereOr($args);
-                        break;
-                    case "whereBetweenTime":
-                        if (count($args) === 3) $model = $model->whereBetweenTime($args[0], $args[1], $args[2]);
-                        break;
-                    case "whereLike":
-                        if (count($args) == 2) $model = $model->whereLike($args[0], $args[1]);
-                        break;
-                }
-            }
+            $model = $this->getBaseModel($whereList, $hiddenField);
 
             $result = $model->paginate(["list_rows" => $page_size, "page" => $page_num]);
 
@@ -180,6 +171,40 @@ abstract class BaseDao
                 "page_num" => $page_num
             ];
         }
+    }
+
+    /**
+     * 获取基础过滤模型数据
+     * @param array $whereList 查询条件
+     * @param array $hiddenField 隐藏字段
+     * @return BaseModel
+     */
+    public function getBaseModel(array $whereList, array $hiddenField): BaseModel
+    {
+        $model = $this->getModel();
+
+        if (count($hiddenField) > 0) $model = $model->hidden($hiddenField);
+
+        foreach ($whereList as $where) {
+            $type = $where[0];
+            $args = $where[1];
+
+            switch ($type) {
+                case "where":
+                    $model = $model->where($args);
+                    break;
+                case "whereOr":
+                    $model = $model->whereOr($args);
+                    break;
+                case "whereBetweenTime":
+                    if (count($args) === 3) $model = $model->whereBetweenTime($args[0], $args[1], $args[2]);
+                    break;
+                case "whereLike":
+                    if (count($args) == 2) $model = $model->whereLike($args[0], $args[1]);
+                    break;
+            }
+        }
+        return $model;
     }
 
 }
