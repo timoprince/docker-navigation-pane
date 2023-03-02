@@ -79,27 +79,27 @@ module.exports = {
       }))
     }
     // if prod, add externals
-    // if (isProd) {
-    //   config.externals = assetsCDN.externals
-    // }
+    if (isProd) {
+      config.externals = assetsCDN.externals
+    }
   },
   chainWebpack: config => {
     // 生产环境下关闭css压缩的 colormin 项，因为此项优化与主题色替换功能冲突
-    // if (isProd) {
-    //   config.plugin('optimize-css')
-    //     .tap(args => {
-    //         args[0].cssnanoOptions.preset[1].colormin = false
-    //       return args
-    //     })
-    // }
+    if (isProd) {
+      config.plugin('optimize-css')
+        .tap(args => {
+            args[0].cssnanoOptions.preset[1].colormin = false
+          return args
+        })
+    }
     // 生产环境下使用CDN
-    // if (isProd) {
-    //   config.plugin('html')
-    //     .tap(args => {
-    //       args[0].cdn = assetsCDN
-    //     return args
-    //   })
-    // }
+    if (isProd) {
+      config.plugin('html')
+        .tap(args => {
+          args[0].cdn = assetsCDN
+        return args
+      })
+    }
   },
   css: {
     loaderOptions: {
@@ -112,7 +112,7 @@ module.exports = {
     }
   },
   publicPath: process.env.VUE_APP_PUBLIC_PATH,
-  outputDir: 'dist',
+  outputDir: '../backend-thinkphp6/public/admin',
   assetsDir: 'static',
   productionSourceMap: false
 }

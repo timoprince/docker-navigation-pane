@@ -60,14 +60,18 @@ class SysUserServices extends BaseServices
      */
     public function updateRow(int $id, array $field): ?string
     {
-        $account = $field["account"];
         try {
-            $find = $this->dao->getModel()->withTrashed()->where(["account" => $account])->find();
-            if (!empty($find) && $find["id"] !== $id) return "该账号已被占用，不可重复使用！";
+            // 如果包含账号更新，则检查账号是否可以被更新
+            if (isset($field["account"])) {
+                $account = $field["account"];
+                $find = $this->dao->getModel()->withTrashed()->where(["account" => $account])->find();
+                if (!empty($find) && $find["id"] !== $id) return "该账号已被占用，不可重复使用！";
+            }
 
-            // 默认密码123456
-            if (empty($field["password"])) $field["password"] = "123456";
-            $field["password"] = password_hash($field["password"], PASSWORD_DEFAULT);
+            // 如果包含密码更新，则自动处理新密码并入库
+            if (isset($field["password"]) && !empty($field["password"])) {
+                $field["password"] = password_hash($field["password"], PASSWORD_DEFAULT);
+            }
 
             // 创建行数据
             $this->dao->updateRow($id, $field);

@@ -10,6 +10,10 @@
               <a-form-model-item label="用户名">
                 <a-input v-model="field.name" :allowClear="true" :maxLength="16" placeholder="根据用户名过滤"></a-input>
               </a-form-model-item>
+              <a-form-model-item label="账号">
+                <a-input v-model="field.account" :allowClear="true" :maxLength="16"
+                         placeholder="根据账号过滤"></a-input>
+              </a-form-model-item>
               <a-form-model-item>
                 <a-space>
                   <a-button icon="search" @click="handleSearch">搜索</a-button>
@@ -39,12 +43,11 @@
                 <a-button icon="close" size="small">删除</a-button>
                 <a-dropdown placement="bottomRight">
                   <a-menu slot="overlay" @click="({key})=>handleMenuClick('setting',key,row)">
-                    <a-menu-item key="resetPwd">重置密码</a-menu-item>
                     <a-menu-item key="resetAvatar">重置头像</a-menu-item>
-                    <a-menu-item key="changePwd">更换密码</a-menu-item>
+                    <a-menu-item key="changePwd">修改密码</a-menu-item>
                   </a-menu>
                   <a-button icon="setting" size="small">
-                    <span>更多</span>
+                    <span>管理</span>
                     <a-icon type="down"/>
                   </a-button>
                 </a-dropdown>
@@ -73,7 +76,8 @@ export default {
       field: {
         page_size: 10,
         page_num: 1,
-        name: null
+        name: undefined,
+        account: undefined
       },
       total: 0,
       tableData: []

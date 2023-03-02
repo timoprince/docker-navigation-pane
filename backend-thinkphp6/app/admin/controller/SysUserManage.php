@@ -32,7 +32,7 @@ class SysUserManage extends AuthController
      * @Title("分页查询用户列表-2023年3月1日")
      * @Method("GET")
      * @Query(ref="pageQuery")
-     * @Query(ref="app\common\model\SysUser",field="name")
+     * @Query(ref="app\common\model\SysUser",field="name,account")
      * @Returned(ref="pageReturn")
      * @Returned("data",type="array",desc="数据集合",ref="app\common\model\SysUser",withoutField="password")
      * @return void
@@ -48,9 +48,11 @@ class SysUserManage extends AuthController
         $page_num = $this->request->get("page_num", 1);
 
         $name = $this->request->get("name");
+        $account = $this->request->get("account");
 
         $whereList = [];
         if (!empty($name)) $whereList[] = ["whereLike", ["name", "%$name%"]];
+        if (!empty($account)) $whereList[] = ["whereLike", ["account", "%$account%"]];
 
         ReturnResponse::success($this->services->queryListByPage($page_size, $page_num, $whereList));
     }
