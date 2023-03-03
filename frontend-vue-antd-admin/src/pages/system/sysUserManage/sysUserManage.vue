@@ -7,6 +7,10 @@
         <a-col :span="24">
           <a-space>
             <a-form-model layout="inline">
+              <a-form-model-item label="类型">
+                <a-select v-model="field.is_system" :allowClear="true" :options="[{label: '系统账户',value: 1},{label: '普通账户',value: 0}]" placeholder="请选择"
+                          style="width: 100px"></a-select>
+              </a-form-model-item>
               <a-form-model-item label="用户名">
                 <a-input v-model="field.name" :allowClear="true" :maxLength="16" placeholder="根据用户名过滤"></a-input>
               </a-form-model-item>
@@ -26,10 +30,14 @@
           <a-space>
             <a-button icon="plus" type="primary" @click="$refs.form.show(null)">添加</a-button>
             <a-button icon="reload" @click="handleReload">刷新</a-button>
+            <a-button :disabled="selectedRowKeys.length === 0" icon="close"
+                      @click="handleRemoveRow(...selectedRowKeys)">删除选中
+            </a-button>
           </a-space>
         </a-col>
         <a-col :span="24">
           <a-table :columns="tableColumns" :dataSource="tableData" :loading="false" :total="total"
+                   :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange,getCheckboxProps }"
                    rowKey="id">
             <template slot="avatar" slot-scope="url">
               <a-avatar :size="32" :src="url" icon="user"></a-avatar>
@@ -40,7 +48,10 @@
             <template slot="action" slot-scope="row">
               <a-space>
                 <a-button icon="edit" size="small" @click="$refs.form.show(row)">修改</a-button>
-                <a-button icon="close" size="small">删除</a-button>
+                <a-popconfirm :disabled="row.is_system === 1" title="是否确认删除该行数据？"
+                              @confirm="handleRemoveRow(row.id)">
+                  <a-button :disabled="row.is_system === 1" icon="close" size="small">删除</a-button>
+                </a-popconfirm>
                 <a-dropdown placement="bottomRight">
                   <a-menu slot="overlay" @click="({key})=>handleMenuClick('setting',key,row)">
                     <a-menu-item key="resetAvatar">重置头像</a-menu-item>
@@ -63,7 +74,7 @@
 <script>
 import PageLayout from "@/layouts/PageLayout.vue";
 import DialogForm from "@/pages/system/sysUserManage/components/dialog-form.vue";
-import {queryListByPage, updateRow} from "@/services/sysUserManage";
+import {deleteRow, queryListByPage, updateRow} from "@/services/sysUserManage";
 import {tableColumns} from "@/pages/system/sysUserManage/options";
 import DialogNewPwd from "@/pages/system/sysUserManage/components/dialog-new-pwd.vue";
 
@@ -77,21 +88,46 @@ export default {
         page_size: 10,
         page_num: 1,
         name: undefined,
-        account: undefined
+        account: undefined,
+        is_system: undefined
       },
       total: 0,
-      tableData: []
+      tableData: [],
+      selectedRowKeys: []
     }
   },
   created() {
     this.handleReload();
   },
   methods: {
+    handleRemoveRow(...ids) {
+      const task = [];
+      for (const id of ids) {
+        task.push(deleteRow(id));
+      }
+
+      Promise.all(task).then(() => {
+        this.selectedRowKeys = [];
+        this.handleReload();
+      })
+
+    },
+    getCheckboxProps(row) {
+      return {
+        props: {
+          disabled: row.is_system === 1
+        }
+      }
+    },
+    onSelectChange(selectedRowKeys) {
+      this.selectedRowKeys = selectedRowKeys;
+    },
     handleSearch() {
       this.total = 0;
       this.tableData = [];
       this.field.page_num = 1;
       this.field.page_size = 10;
+      this.selectedRowKeys = [];
       this.handleReload();
     },
     handleReload() {

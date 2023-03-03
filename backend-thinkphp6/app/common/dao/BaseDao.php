@@ -97,6 +97,18 @@ abstract class BaseDao
      */
     public function updateRow(int $id, array $field, array $allowField = [])
     {
+        $this->updateRowByWhere($field, ["id" => $id], $allowField);
+    }
+
+    /**
+     * 根据过滤条件更新行数据
+     * @param array $field 新信息
+     * @param array $whereList 过滤条件
+     * @param array $allowField 允许字段，留空则所有字段
+     * @return void
+     */
+    public function updateRowByWhere(array $field, array $whereList = [], array $allowField = [])
+    {
         // 数据处理
         $field = $this->clearField($field);
 
@@ -107,7 +119,7 @@ abstract class BaseDao
             }
         }
 
-        $this->getModel()->update($field, ["id" => $id], $allowField);
+        $this->getModel()->update($field, $whereList, $allowField);
     }
 
     /**
@@ -177,13 +189,10 @@ abstract class BaseDao
      * 获取基础过滤模型数据
      * @param array $whereList 查询条件
      * @param array $hiddenField 隐藏字段
-     * @return BaseModel
      */
-    public function getBaseModel(array $whereList, array $hiddenField): BaseModel
+    public function getBaseModel(array $whereList, array $hiddenField)
     {
         $model = $this->getModel();
-
-        if (count($hiddenField) > 0) $model = $model->hidden($hiddenField);
 
         foreach ($whereList as $where) {
             $type = $where[0];
@@ -204,6 +213,9 @@ abstract class BaseDao
                     break;
             }
         }
+
+        if (count($hiddenField) > 0) $model = $model->hidden($hiddenField);
+
         return $model;
     }
 

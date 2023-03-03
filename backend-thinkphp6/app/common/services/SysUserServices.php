@@ -89,6 +89,12 @@ class SysUserServices extends BaseServices
      */
     public function deleteRow(int $id): string
     {
-        return $this->dao->removeRow($id);
+        try {
+            $find = $this->dao->getModel()->where(["id" => $id])->find();
+            if ($find["is_system"] === 1) return "系统账户不允许删除！";
+            return $this->dao->removeRow($id);
+        } catch (DataNotFoundException|ModelNotFoundException|DbException $e) {
+            return "";
+        }
     }
 }

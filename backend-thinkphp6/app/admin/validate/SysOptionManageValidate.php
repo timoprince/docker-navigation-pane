@@ -7,22 +7,16 @@ use think\Validate;
 class SysOptionManageValidate extends Validate
 {
     protected $rule = [
-        "id|ID" => "integer",
-        "name|昵称" => "length:1,16",
+        "name|名称" => "alphaDash|length:1,50",
     ];
 
-    public function sceneCreate(): SysOptionManageValidate
+    public function sceneGetValue(): SysOptionManageValidate
     {
         return $this->only(["name"])->append("name", "require");
     }
 
-    public function sceneUpdate(): SysOptionManageValidate
+    public function sceneSetValue(): SysOptionManageValidate
     {
-        return $this->append("id", "require");
-    }
-
-    public function sceneDelete(): SysOptionManageValidate
-    {
-        return $this->only(["id"]);
+        return $this->append("content", "require");
     }
 }

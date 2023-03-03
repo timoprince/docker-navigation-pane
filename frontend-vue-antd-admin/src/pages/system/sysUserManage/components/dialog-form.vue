@@ -37,7 +37,7 @@
 <script>
 
 import {optionRoles, resetField} from "@/pages/system/sysUserManage/options";
-import UploadImage from "@/components/upload/upload-image.vue";
+import UploadImage from "@/components/custom/upload/upload-image.vue";
 import {createRow, updateRow} from "@/services/sysUserManage";
 
 export default {

@@ -50,6 +50,14 @@ const options = {
               },
               component: () => import('@/pages/system/sysUserManage/sysUserManage')
             },
+            {
+              path: 'sysOptionManage',
+              name: '系统设置',
+              meta: {
+                icon: 'setting'
+              },
+              component: () => import('@/pages/system/sysOptionManage/sysOptionManage')
+            },
           ]
         },
         {

@@ -29,96 +29,42 @@ class SysOptionManage extends AuthController
     }
 
     /**
-     * @Title("分页查询设置列表-2023年3月3日")
+     * @Title("获取配置-2023年3月3日")
      * @Method("GET")
-     * @Query(ref="pageQuery")
      * @Query(ref="app\common\model\SysOption",field="name")
-     * @Returned(ref="pageReturn")
-     * @Returned("data",type="array",desc="数据集合",ref="app\common\model\SysOption")
+     * @Returned(ref="app\common\model\SysOption",field="name,value")
      * @return void
      */
-    public function queryListByPage()
+    public function getValue()
     {
         $data = $this->request->get();
-        $valid = new PageValidate();
-
-        if (!$valid->check($data)) ReturnResponse::error($valid->getError());
-
-        $page_size = $this->request->get("page_size", 10);
-        $page_num = $this->request->get("page_num", 1);
-
-        $name = $this->request->get("name");
-
-        $whereList = [];
-        if (!empty($name)) $whereList[] = ["whereLike", ["name", "%$name%"]];
-
-        ReturnResponse::success($this->services->queryListByPage($page_size, $page_num, $whereList));
-    }
-
-    /**
-     * @Title("创建数据-2023年3月3日")
-     * @Method("POST")
-     * @Param(ref="app\common\model\SysOption",field="name,value")
-     * @return void
-     */
-    public function createRow()
-    {
-        $data = $this->request->post();
 
         try {
-            validate(SysOptionManageValidate::class)->scene("create")->check($data);
-            $err = $this->services->createRow($data);
-            if ($err) ReturnResponse::error($err);
-            ReturnResponse::make(ReturnResponse::CODE_SUCCESS, "创建成功！");
+            validate(SysOptionManageValidate::class)->scene("getValue")->check($data);
+            $name = $this->request->get("name");
+            ReturnResponse::success($this->services->get($name));
         } catch (ValidateException $exception) {
-            ReturnResponse::error($exception->getError());
+            ReturnResponse::error($exception->getMessage());
         }
     }
 
     /**
-     * @Title("更新数据-2023年3月3日")
+     * @Title("更新配置-2023年3月3日")
      * @Method("POST")
-     * @Param(ref="app\common\model\SysOption",field="id,name,value")
+     * @Param(ref="app\common\model\SysOption",field="name,content")
      * @return void
      */
-    public function updateRow()
+    public function setValue()
     {
         $data = $this->request->post();
-
         try {
-            validate(SysOptionManageValidate::class)->scene("update")->check($data);
-
-            $id = $this->request->post("id");
-
-            $err = $this->services->updateRow($id, $data);
-            if ($err) ReturnResponse::error($err);
+            validate(SysOptionManageValidate::class)->scene("setValue")->check($data);
+            $name = $this->request->post("name");
+            $content = $this->request->post("content");
+            $this->services->set($name, $content);
             ReturnResponse::make(ReturnResponse::CODE_SUCCESS, "更新成功！");
         } catch (ValidateException $exception) {
-            ReturnResponse::error($exception->getError());
-        }
-    }
-
-    /**
-     * @Title("删除数据-2023年3月3日")
-     * @Method("POST")
-     * @Param(ref="app\common\model\SysOption",field="id")
-     * @return void
-     */
-    public function deleteRow()
-    {
-        $data = $this->request->post();
-
-        try {
-            validate(SysOptionManageValidate::class)->scene("delete")->check($data);
-
-            $id = $this->request->post("id");
-
-            $err = $this->services->deleteRow($id);
-            if ($err) ReturnResponse::error($err);
-
-            ReturnResponse::make(ReturnResponse::CODE_SUCCESS, "删除成功！");
-        } catch (ValidateException $exception) {
-            ReturnResponse::error($exception->getError());
+            ReturnResponse::error($exception->getMessage());
         }
     }
 }

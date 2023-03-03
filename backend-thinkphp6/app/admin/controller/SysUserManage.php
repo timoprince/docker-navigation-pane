@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\validate\SysUserManageValidate;
+use app\common\model\SysUser;
 use app\common\services\SysUserServices;
 use app\common\utils\ReturnResponse;
 use app\common\validate\PageValidate;
@@ -32,7 +33,7 @@ class SysUserManage extends AuthController
      * @Title("分页查询用户列表-2023年3月1日")
      * @Method("GET")
      * @Query(ref="pageQuery")
-     * @Query(ref="app\common\model\SysUser",field="name,account")
+     * @Query(ref="app\common\model\SysUser",field="name,account,is_system")
      * @Returned(ref="pageReturn")
      * @Returned("data",type="array",desc="数据集合",ref="app\common\model\SysUser",withoutField="password")
      * @return void
@@ -49,8 +50,10 @@ class SysUserManage extends AuthController
 
         $name = $this->request->get("name");
         $account = $this->request->get("account");
+        $is_system = $this->request->get("is_system");
 
         $whereList = [];
+        if (isset($is_system)) $whereList[] = ["where", ["is_system" => $is_system]];
         if (!empty($name)) $whereList[] = ["whereLike", ["name", "%$name%"]];
         if (!empty($account)) $whereList[] = ["whereLike", ["account", "%$account%"]];
 
