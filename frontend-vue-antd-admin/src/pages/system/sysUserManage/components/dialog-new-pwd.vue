@@ -22,7 +22,7 @@
 
 <script>
 import {optionRoles, resetField} from "@/pages/system/sysUserManage/options";
-import {updateRow} from "@/services/sysUserManage";
+import {updateRow} from "@/services/src/sysUserManage";
 
 
 export default {

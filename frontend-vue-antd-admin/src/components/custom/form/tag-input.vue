@@ -66,6 +66,7 @@ export default {
       if (inputValue && tags.indexOf(inputValue) === -1) {
         tags = [...tags, inputValue];
       }
+      this.$emit("input",tags);
       Object.assign(this, {
         tags,
         inputVisible: false,

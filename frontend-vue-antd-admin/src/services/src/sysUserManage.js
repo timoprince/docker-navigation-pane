@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api";
 import {METHOD, request} from "@/utils/request";
 import md5 from "js-md5";
 

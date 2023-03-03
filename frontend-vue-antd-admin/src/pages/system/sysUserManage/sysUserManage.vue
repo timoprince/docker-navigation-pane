@@ -74,7 +74,7 @@
 <script>
 import PageLayout from "@/layouts/PageLayout.vue";
 import DialogForm from "@/pages/system/sysUserManage/components/dialog-form.vue";
-import {deleteRow, queryListByPage, updateRow} from "@/services/sysUserManage";
+import {deleteRow, queryListByPage, updateRow} from "@/services/src/sysUserManage";
 import {tableColumns} from "@/pages/system/sysUserManage/options";
 import DialogNewPwd from "@/pages/system/sysUserManage/components/dialog-new-pwd.vue";
 

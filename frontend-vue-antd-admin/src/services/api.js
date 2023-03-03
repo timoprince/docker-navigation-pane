@@ -9,6 +9,10 @@ module.exports = {
         createRow: baseUrl + '/admin/sysUserManage/createRow',
         updateRow: baseUrl + "/admin/sysUserManage/updateRow",
         deleteRow: baseUrl + '/admin/sysUserManage/deleteRow'
+    },
+    sysOptionManage: {
+        getValue: baseUrl+"/admin/sysOptionManage/getValue",
+        setValue: baseUrl+"/admin/sysOptionManage/setValue"
     }
 
 }
