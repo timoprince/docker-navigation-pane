@@ -34,16 +34,16 @@ class SysOptionServices extends BaseServices
     /**
      * 设置值
      * @param string $name 值名称
-     * @param mixed $content 值内容
+     * @param string $content 值内容
      * @return void
      */
-    public function set(string $name, $content)
+    public function set(string $name, string $content)
     {
         $field = ["name" => $name, "content" => $content];
         if (is_null($this->get($name))) {
             $this->dao->createRow($field);
         } else {
-            $this->dao->updateRowByWhere($field, [["where", ["name" => $name]]]);
+            $this->dao->updateRowByWhere($field,["name"=>$name]);
         }
     }
 
